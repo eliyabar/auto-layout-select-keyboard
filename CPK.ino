@@ -28,18 +28,17 @@
 enum layer_names {
     _CHROME,
     _INTELLIJ,
-    _FIREFOX
+    _FIREFOX,
+    _VSCODE
  };
 
-int SELECTED_LAYER = _TEST;
+int SELECTED_LAYER = _CHROME;
 
-// JP1 is an input
-// #define MATRIX_ROW_PINS { F4, F5, F6, F7 }
-byte rows[] = {6,7,8,9};
+// MATRIX_ROW_PINS { F4, F5, F6, F7 }
+byte rows[] = {21, 20, 19, 18};
 const int MATRIX_ROWS = sizeof(rows)/sizeof(rows[0]);
  
-// JP2 and JP3 are outputs
-// #define MATRIX_COL_PINS { D1, D0, D4, C6 }
+// MATRIX_COL_PINS { D1, D0, D4, C6 }
 byte cols[] = {2,3,4,5};
 const int MATRIX_COLS = sizeof(cols)/sizeof(cols[0]);
 
@@ -167,6 +166,10 @@ class SerialCommandReader {
           Serial.println("Changing layout to _FIREFOX");
           SELECTED_LAYER = _FIREFOX;
           break;
+        case _VSCODE:
+          Serial.println("Changing layout to _FIREFOX");
+          SELECTED_LAYER = _VSCODE;
+          break;
         default:
           Serial.println("NO SUCH LAYOUT");
           break;
@@ -223,46 +226,66 @@ class button {
   boolean pressed = 0;
 };
 
-// Macros setup
+// ** Macros setup **
 
 // Debugging
 // 1. Step Over
 const uint8_t stepOverIntellij[] = {KEY_F8};
+const uint8_t stepOverFireFox[] = {KEY_F10};
+const uint8_t stepOverVSCode[] = {KEY_F10};
 // 2. Step into
 const uint8_t stepIntoIntellij[] = {KEY_F7};
+const uint8_t stepIntoFireFox[] = {KEY_F11};
+const uint8_t stepIntoVSCode[] = {KEY_F11};
 // 3. Toggle breakpoint
 const uint8_t toggleBreakpointIntellij[] = {KEY_LEFT_CTRL, KEY_F8};
+const uint8_t toggleBreakpointFireFox[] = {KEY_LEFT_CTRL, 'b'};
+const uint8_t nextBreakPointVSCode[] = {KEY_F9};
 // 4. Next breakpoint
 const uint8_t nextBreakPointIntellij[] = {KEY_F9};
-
+const uint8_t nextBreakPointFireFox[] = {KEY_F8};
+const uint8_t continueVSCode[] = {KEY_F5};
 // IDE
 // 5. Start program
 const uint8_t startIntellij[] = {KEY_LEFT_SHIFT, KEY_F10};
+const uint8_t openConsoleFireFox[] = {KEY_LEFT_CTRL, KEY_LEFT_SHIFT, 'k'};
+const uint8_t startVSCode[] = {KEY_F5};
 // 6. Stop program
 const uint8_t stopIntellij[] = {KEY_LEFT_CTRL, KEY_F2};
+const uint8_t closeConsoleFireFox[] = {KEY_LEFT_CTRL, KEY_LEFT_SHIFT, 'i'};
+const uint8_t stopVSCode[] = {KEY_LEFT_SHIFT, KEY_F5};
 // 7. Next tab
 const uint8_t nextTabIntellij[] = {KEY_RIGHT_ALT, KEY_LEFT_ARROW};
 const uint8_t nextTabFireFoxChrome[] = {KEY_LEFT_CTRL, KEY_TAB};
+const uint8_t nextTabVSCode[] = {KEY_LEFT_CTRL, KEY_TAB};
 // 8. Previous tab
 const uint8_t prevTabIntellij[] = {KEY_RIGHT_ALT, KEY_RIGHT_ARROW};
 const uint8_t prevTabFireFoxChrome[] = {KEY_LEFT_CTRL, KEY_LEFT_SHIFT, KEY_TAB};
+const uint8_t prevTabVSCode[] = {KEY_LEFT_CTRL, KEY_LEFT_SHIFT, KEY_TAB};
 // 9. Command search
-const uint8_t searchCOmmandIntellij[] = {KEY_LEFT_CTRL, KEY_LEFT_SHIFT, 'a'};
+const uint8_t searchCommandIntellij[] = {KEY_LEFT_CTRL, KEY_LEFT_SHIFT, 'a'};
+const uint8_t searchCommandVSCode[] = {KEY_LEFT_CTRL, KEY_LEFT_SHIFT, 'p'};
 
 // Navigation
 // 10. Navigate last edit location
 const uint8_t lastEditLocationIntellij[] = {KEY_LEFT_CTRL, KEY_LEFT_SHIFT, KEY_BACKSPACE};
+const uint8_t goBackVSCode[] = {KEY_LEFT_ALT,KEY_LEFT_ARROW};
 // 11. Go to Implementation
 const uint8_t goToImplementationIntellij[] = {KEY_LEFT_CTRL, KEY_LEFT_ALT, 'b'};
+const uint8_t goToImplementationVSCode[] = {KEY_F10};
 // 12. Next error
 const uint8_t nextErrorIntellij[] = {KEY_F2};
+const uint8_t nextErrorVSCode[] = {KEY_F8};
 
 // Search 
 // 13. Search everywhere
 const uint8_t searchEverywhereIntellij[] = {KEY_LEFT_CTRL, KEY_LEFT_SHIFT, 'f'};
+const uint8_t searchInFilesFireFox[] = {KEY_LEFT_CTRL, KEY_LEFT_SHIFT, 'f'};
+const uint8_t searchInFilesVSCode[] = {KEY_LEFT_CTRL, KEY_LEFT_SHIFT, 'f'};
 // 14. replace
 const uint8_t replaceIntellij[] = {KEY_LEFT_CTRL, 'r'};
-
+const uint8_t goToFileFireFox[] = {KEY_LEFT_CTRL, 'p'};
+const uint8_t goToFileVSCode[] = {KEY_LEFT_CTRL, 'h'};
 
 // Git
 // 15. Commit
@@ -271,34 +294,37 @@ const uint8_t gitCommitIntellij[] = {KEY_LEFT_CTRL, 'k'};
 const uint8_t gitPushIntellij[] = {KEY_LEFT_CTRL, KEY_LEFT_SHIFT, 'k'};
 
 
+// Empty command
+const uint8_t empty[] = {};
 
 
 
 // Test
-//const uint8_t k1[] = {'1'};
-//const uint8_t k2[] = {'2'};
-//const uint8_t k3[] = {'3'};
-//const uint8_t k4[] = {'4'};
-//const uint8_t k5[] = {'5'};
-//const uint8_t k6[] = {'6'};
-//const uint8_t k7[] = {'7'};
-//const uint8_t k8[] = {'8'};
-//const uint8_t k9[] = {'9'};
-//const uint8_t k10[] = {'0'};
-//const uint8_t k11[] = {'a'};
-//const uint8_t k12[] = {'b'};
-//const uint8_t k13[] = {'c'};
-//const uint8_t k14[] = {'d'};
-//const uint8_t k15[] = {'e'};
-//const uint8_t k16[] = {'f'};
+// const uint8_t k1[] = {'1'};
+// const uint8_t k2[] = {'2'};
+// const uint8_t k3[] = {'3'};
+// const uint8_t k4[] = {'4'};
+// const uint8_t k5[] = {'5'};
+// const uint8_t k6[] = {'6'};
+// const uint8_t k7[] = {'7'};
+// const uint8_t k8[] = {'8'};
+// const uint8_t k9[] = {'9'};
+// const uint8_t k10[] = {'0'};
+// const uint8_t k11[] = {'a'};
+// const uint8_t k12[] = {'b'};
+// const uint8_t k13[] = {'c'};
+// const uint8_t k14[] = {'d'};
+// const uint8_t k15[] = {'e'};
+// const uint8_t k16[] = {'f'};
 //[_TEST] = LAYOUT_ortho_4x4(button(k1,1), button(k2,1), button(k3,1), button(k4,1), button(k5,1), button(k6,1), button(k7,1), button(k8,1), button(k9,1), button(k10,1), button(k11,1), button(k12,1), button(k13,1), button(k14,1), button(k15,1), button(k16,1))
 
 
 // button objects, organized in array
 const button buttons[][MATRIX_ROWS][MATRIX_COLS] = {
-  [_CHROME] = LAYOUT_ortho_4x4( button(prevTabFireFoxChrome,3), button(nextTabFireFoxChrome,2), button(prevTabFireFoxChrome,3), button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2)),
-  [_INTELLIJ] = LAYOUT_ortho_4x4( button(prevTabIntellij,2), button(nextTabIntellij,2),  button(prevTabIntellij,2), button(nextTabIntellij,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2)),
-  [_FIREFOX] = LAYOUT_ortho_4x4(button(prevTabFireFoxChrome,3), button(nextTabFireFoxChrome,2),  button(prevTabFireFoxChrome,3), button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2),button(nextTabFireFoxChrome,2))
+  [_CHROME] = LAYOUT_ortho_4x4(button(stepOverFireFox,1), button(stepIntoFireFox,1), button(toggleBreakpointFireFox,2),button(nextBreakPointFireFox,1), button(openConsoleFireFox,3), button(closeConsoleFireFox,3), button(nextTabFireFoxChrome,2), button(prevTabFireFoxChrome,3), button(empty,0), button(empty,0), button(empty,0), button(empty,0), button(searchInFilesFireFox,3), button(goToFileFireFox,2), button(empty,0), button(empty,0)),
+  [_INTELLIJ] = LAYOUT_ortho_4x4(button(stepOverIntellij,1), button(stepIntoIntellij,1), button(toggleBreakpointIntellij,2),button(nextBreakPointIntellij,1), button(startIntellij,2), button(stopIntellij,2), button(nextTabIntellij,2), button(prevTabIntellij,2), button(searchCommandIntellij,3), button(lastEditLocationIntellij,3), button(goToImplementationIntellij,3), button(nextErrorIntellij,1), button(searchEverywhereIntellij,3), button(replaceIntellij,2), button(gitCommitIntellij,2), button(gitPushIntellij,3)),
+  [_FIREFOX] = LAYOUT_ortho_4x4(button(stepOverFireFox,1), button(stepIntoFireFox,1), button(toggleBreakpointFireFox,2),button(nextBreakPointFireFox,1), button(openConsoleFireFox,3), button(closeConsoleFireFox,3), button(nextTabFireFoxChrome,2), button(prevTabFireFoxChrome,3), button(empty,0), button(empty,0), button(empty,0), button(empty,0), button(searchInFilesFireFox,3), button(goToFileFireFox,2), button(empty,0), button(empty,0)),
+  [_VSCODE] = LAYOUT_ortho_4x4(button(stepOverVSCode,1), button(stepIntoVSCode,1), button(nextBreakPointVSCode,1), button(continueVSCode,1), button(startVSCode,1), button(stopVSCode,2), button(nextTabVSCode,2), button(prevTabVSCode,3), button(searchCommandVSCode,3), button(goBackVSCode,2), button(goToImplementationVSCode,1), button(nextErrorVSCode,1), button(searchInFilesVSCode,3), button(goToFileVSCode,2), button(empty,0), button(empty,0))
 };
 
 // Helper for Serial communication and comman building.
