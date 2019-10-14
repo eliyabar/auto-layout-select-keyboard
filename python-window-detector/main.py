@@ -6,7 +6,7 @@ from wdf import WindowDetectorFactory
 BAUDRATE = 9600
 ser = None
 thread = None
-keymap_names = {'chrome': '10', 'pycharm': '11', 'firefox': '12'}
+keymap_names = {'chrome': '10', 'pycharm': '11', 'firefox': '12', 'visual studio code': '13'}
 current_keymap = None
 window_detector = None
 import threading
